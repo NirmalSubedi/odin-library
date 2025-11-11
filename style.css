@@ -2,7 +2,7 @@
     --color-gray: #eee;
 }
 
-/* Reset */
+/* Start Reset */
 *,
 *::before,
 *::after {
@@ -33,18 +33,20 @@ h6 {
 * {
     margin: 0;
 }
+/*------End Reset------*/
 
-/* End Reset */
 
 body {
     background: var(--color-gray);
+    padding: 1rem;
 }
 
+/* Card */
 .container .library{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
     gap: 1rem;
-    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .card {
@@ -56,12 +58,14 @@ body {
     border-radius: 1rem;
     box-shadow: 5px 5px 6px #0005;
     background: #fff;
+    position: relative;
 }
 
 .card:hover {
     background: #eee;
 }
 
+/* Book Image - Card */
 .cover {
     width: 100%;
     height: 150px;
@@ -70,6 +74,15 @@ body {
     border-bottom: 1px solid #000;
 }
 
+/* Remove Button - Card */
+.remove-button {
+    width: 20px;
+    margin-left: auto;
+    position: absolute;
+    top: 10px; right: 10px;
+}
+
+/* Text Content - Card */
 .text {
     padding-top: 0.5rem;
     display: grid;
@@ -97,6 +110,7 @@ body {
     width: 20px;
 }
 
+/* Add Book Button */
 .container> :last-child {
     display: block;
     border: 1px solid #000;
@@ -115,10 +129,12 @@ body {
     vertical-align: bottom;
 }
 
+/* Dialog Form */
 dialog {
     place-self: center;
     position: relative;
     padding: 1rem 2rem;
+    font-size: 1.2rem;
 }
 
 dialog::backdrop {
@@ -130,6 +146,7 @@ form>* {
 }
 
 form h1 {
+    font-family: sans-serif;
     text-align: center;
     margin-bottom: -0.5rem;
 }
@@ -137,7 +154,6 @@ form h1 {
 button.close:has(img) {
     width: 0;
     height: 0;
-    margin: 0;
     padding: 0;
 }
 
