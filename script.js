@@ -1,4 +1,19 @@
+const container = document.querySelector(".container");
+const library = container.querySelector(".library");
+const dialog = document.querySelector('dialog');
+const showButton = document.querySelector('button.show');
+const closeButton = document.querySelector('.image.close');
+const title = dialog.querySelector('#title');
+const author = dialog.querySelector('#author');
+const pages = dialog.querySelector('#pages');
+const readStatusTrue = dialog.querySelector('#true');
+const readStatusFalse = dialog.querySelector('#false');
+const submit = document.querySelector('button.submit');
+
+container.appendChild(showButton); // Move to last child after script injects DOM nodes
+
 const myLibrary = [];
+
 
 function Book(title, author, pages, read, image) {
     if (!new.target) {
@@ -17,8 +32,6 @@ function addBookToLibrary(title, author, pages, read) {
         new Book(title, author, pages, read)
     );
 }
-
-const container = document.querySelector(".container");
 
 function createCardForBook(book) {
     const card = document.createElement('div');
@@ -46,7 +59,7 @@ function createCardForBook(book) {
         cover.setAttribute("src", `imgs/default.png`) :
         cover.setAttribute("src", `imgs/book${myLibrary.indexOf(book) + 1}.jpeg`);
 
-    container.appendChild(card);
+    library.appendChild(card);
     card.appendChild(cover);
     card.appendChild(text);
     text.appendChild(title);
@@ -59,6 +72,28 @@ function displayBookOnPage() {
     myLibrary.forEach(book => createCardForBook(book));
 }
 
+function clearFormInputs() {
+    title.value = '';
+    author.value = '';
+    pages.value = '';
+    readStatusTrue.checked === true ? readStatusTrue.checked = false :
+        readStatusFalse.checked === true ? readStatusFalse.checked = false :
+            'nothing selected';
+
+}
+
+function addNewBook(event) {
+    event.preventDefault();
+    dialog.close();
+    const book = new Book(title.value, author.value, pages.value, readStatusTrue.checked === true);
+    myLibrary.push(book);
+    createCardForBook(book);
+    clearFormInputs();
+}
+
+
+// // // Code Execution // // //
+
 addBookToLibrary('Anna Karenina', 'Leo Tolstoy', 397, true);
 addBookToLibrary('Harry Potter and the Deathly Hallows', 'J.K. Rowling', 784, true);
 addBookToLibrary('Adventures of Huckleberry Finn', 'Mark Twain', 362, false);
@@ -67,8 +102,14 @@ addBookToLibrary('Onyx Storm', 'Rebecca Yarros', 544, true);
 addBookToLibrary('The Catcher in the Rye', 'J.D. Salinger', 304, false);
 addBookToLibrary('Lolita', 'Vladimir Nabokov', 317, false);
 addBookToLibrary('The Stand', 'Stephen King', 1_152, true);
-addBookToLibrary('Generic Book', 'John Doe', Infinity, true);
+
 displayBookOnPage();
 
-// console.log(myLibrary[0]);
+showButton.addEventListener("click", () => dialog.showModal());
+closeButton.addEventListener("click", (event) => {
+    clearFormInputs();
+    event.preventDefault();
+    dialog.close();
+});
 
+submit.addEventListener("click", addNewBook);

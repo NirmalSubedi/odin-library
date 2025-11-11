@@ -36,13 +36,13 @@ h6 {
 
 /* End Reset */
 
-body{
+body {
     background: var(--color-gray);
 }
 
-.container {
+.container .library{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
     gap: 1rem;
     padding: 1rem;
 }
@@ -87,11 +87,88 @@ body{
     font-family: sans-serif;
 }
 
-.pages, .read {
+.pages,
+.read {
     justify-self: end;
     align-self: center;
 }
 
 .read {
     width: 20px;
+}
+
+.container> :last-child {
+    display: block;
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+    padding: 1rem 0.5rem;
+    background: #eee;
+    margin: 0 auto;
+}
+
+.container> :last-child:hover {
+    filter: invert(1);
+}
+
+.container> :last-child>* {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+dialog {
+    place-self: center;
+    position: relative;
+    padding: 1rem 2rem;
+}
+
+dialog::backdrop {
+    background: #000d;
+}
+
+form>* {
+    margin-bottom: 1rem;
+}
+
+form h1 {
+    text-align: center;
+    margin-bottom: -0.5rem;
+}
+
+button.close:has(img) {
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.image.close img {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+form p label {
+    display: block;
+    margin-right: 0.5rem;
+}
+
+form input[type=text],
+form button {
+    width: 100%;
+}
+
+form input[type=number] {
+    width: 9ch;
+}
+
+form div p {
+    margin-bottom: 0.5rem;
+}
+
+form div label {
+    margin-left: 0.25rem;
+}
+
+form div input:last-of-type {
+    margin-left: 1rem;
 }
