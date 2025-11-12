@@ -1,14 +1,27 @@
-function Book(title, author, pages, read, image) {
+function Book(title, author, pages, read) {
     if (!new.target) {
         throw Error("You must use the 'new' operator to call the constructor");
     }
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-    this.image = image;
-    this.id = crypto.randomUUID();
+    this.title = title, 
+        this.author = author,
+        this.pages = pages,
+        this.read = read,
+        this.id = crypto.randomUUID();
 }
+
+Book.prototype.changeReadStatus = function () {
+    this.card = $(`[data-unique-id="${this.id}"]`);
+    this.readIcon = this.card.lastElementChild.lastElementChild;
+    if (this.read) {
+        this.read = false;
+        this.readIcon.setAttribute('src', 'imgs/icons/eye-outline.svg')
+    } else {
+        this.read = true;
+        this.readIcon.setAttribute('src', 'imgs/icons/eye-check-outline.svg')
+    };
+}
+
+Book.prototype.readIcon = $(`[data-unique-id="${this.id}"]`);
 
 function addBookToLibrary(title, author, pages, read) {
     myLibrary.push(
@@ -24,6 +37,10 @@ function setClass(element, myClass) {
     element.classList.add(myClass);
 }
 
+function $(element) {
+    return document.querySelector(element);
+}
+
 function createCardForBook(book) {
     const card = createElement('div');
     const cover = createElement('img');
@@ -31,7 +48,7 @@ function createCardForBook(book) {
     const title = createElement('p');
     const author = createElement('p');
     const pages = createElement('p');
-    const readStatus = createElement('img');
+    const readIcon = createElement('img');
     const removeButton = createElement('img');
 
     setClass(card, "card");
@@ -40,14 +57,17 @@ function createCardForBook(book) {
     setClass(title, "title");
     setClass(author, "author");
     setClass(pages, "pages");
-    setClass(readStatus, "read");
+    setClass(readIcon, "read");
     setClass(removeButton, "remove-button");
 
     title.textContent = book.title;
     author.textContent = book.author;
     pages.textContent = `${book.pages} Pages`;
 
-    readStatus.setAttribute("src", 'imgs/icons/eye-check-outline.svg');
+    card.setAttribute("data-unique-id", `${book.id}`);
+    book.read ?
+        readIcon.setAttribute("src", 'imgs/icons/eye-check-outline.svg') :
+        readIcon.setAttribute("src", 'imgs/icons/eye-outline.svg');
     myLibrary.indexOf(book) + 1 > 8 ?
         cover.setAttribute("src", `imgs/default.png`) :
         cover.setAttribute("src", `imgs/book${myLibrary.indexOf(book) + 1}.jpeg`);
@@ -55,9 +75,11 @@ function createCardForBook(book) {
 
     library.appendChild(card);
     card.append(removeButton, cover, text);
-    text.append(title, pages, author, readStatus);
+    text.append(title, pages, author, readIcon);
 
-    removeButton.addEventListener("click", removeBook);
+    removeButton.addEventListener("click", (event) => event.target.parentElement.remove());
+
+    card.addEventListener('click', () => { book.changeReadStatus() });
 }
 
 function displayBookOnPage() {
@@ -76,29 +98,25 @@ function clearFormInputs() {
 function addNewBook(event) {
     event.preventDefault();
     dialog.close();
-    const book = new Book(title.value, author.value, pages.value, formReadStatusTrue.checked === true);
+    const book = new Book(title.value, author.value, pages.value, formReadStatusTrue.checked);
     myLibrary.push(book);
     createCardForBook(book);
     clearFormInputs();
 }
 
-function removeBook(event) {
-    event.target.parentElement.remove();
-}
-
 const myLibrary = [];
 
-const container = document.querySelector('.container');
-const library = container.querySelector('.library');
-const dialog = document.querySelector('dialog');
-const showButton = document.querySelector('button.show');
-const closeButton = document.querySelector('.image.close');
-const formTitle = dialog.querySelector('#title');
-const formAuthor = dialog.querySelector('#author');
-const formPages = dialog.querySelector('#pages');
-const formReadStatusTrue = dialog.querySelector('#true');
-const formReadStatusFalse = dialog.querySelector('#false');
-const submit = document.querySelector('button.submit');
+const container = $('.container');
+const library = $('.library');
+const dialog = $('dialog');
+const showButton = $('button.show');
+const closeButton = $('.image.close');
+const formTitle = $('#title');
+const formAuthor = $('#author');
+const formPages = $('#pages');
+const formReadStatusTrue = $('#true');
+const formReadStatusFalse = $('#false');
+const submit = $('button.submit');
 
 container.appendChild(showButton); // Move to last child after script injection of DOM nodes
 
@@ -118,10 +136,10 @@ displayBookOnPage();
 
 showButton.addEventListener("click", () => dialog.showModal());
 closeButton.addEventListener("click", (event) => {
-    console.log(event.target);
     clearFormInputs();
     event.preventDefault();
     dialog.close();
 });
 
 submit.addEventListener("click", addNewBook);
+
