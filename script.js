@@ -1,27 +1,50 @@
-function Book(title, author, pages, read) {
-    if (!new.target) {
-        throw Error("You must use the 'new' operator to call the constructor");
+// function Book(title, author, pages, read) {
+//     if (!new.target) {
+//         throw Error("You must use the 'new' operator to call the constructor");
+//     }
+//     this.title = title, 
+//         this.author = author,
+//         this.pages = pages,
+//         this.read = read,
+//         this.id = crypto.randomUUID();
+// }
+
+
+// Book.prototype.changeReadStatus = function () {
+//     this.card = $(`[data-unique-id="${this.id}"]`);
+//     this.readIcon = this.card.lastElementChild.lastElementChild;
+//     if (this.read) {
+//         this.read = false;
+//         this.readIcon.setAttribute('src', 'imgs/icons/eye-outline.svg')
+//     } else {
+//         this.read = true;
+//         this.readIcon.setAttribute('src', 'imgs/icons/eye-check-outline.svg')
+//     };
+// }
+
+// Book.prototype.readIcon = $(`[data-unique-id="${this.id}"]`);
+
+/* Refactored above code to to use Class syntax - Assignment from Classes Module(JavaScript Course) */
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = title,
+            this.author = author,
+            this.pages = pages,
+            this.read = read,
+            this.id = crypto.randomUUID();
     }
-    this.title = title, 
-        this.author = author,
-        this.pages = pages,
-        this.read = read,
-        this.id = crypto.randomUUID();
+    changeReadStatus() {
+        this.card = $(`[data-unique-id="${this.id}"]`);
+        this.readIcon = this.card.lastElementChild.lastElementChild;
+        if (this.read) {
+            this.read = false;
+            this.readIcon.setAttribute('src', 'imgs/icons/eye-outline.svg')
+        } else {
+            this.read = true;
+            this.readIcon.setAttribute('src', 'imgs/icons/eye-check-outline.svg')
+        };
+    }
 }
-
-Book.prototype.changeReadStatus = function () {
-    this.card = $(`[data-unique-id="${this.id}"]`);
-    this.readIcon = this.card.lastElementChild.lastElementChild;
-    if (this.read) {
-        this.read = false;
-        this.readIcon.setAttribute('src', 'imgs/icons/eye-outline.svg')
-    } else {
-        this.read = true;
-        this.readIcon.setAttribute('src', 'imgs/icons/eye-check-outline.svg')
-    };
-}
-
-Book.prototype.readIcon = $(`[data-unique-id="${this.id}"]`);
 
 function addBookToLibrary(title, author, pages, read) {
     myLibrary.push(
