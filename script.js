@@ -118,6 +118,45 @@ function clearFormInputs() {
             'nothing selected';
 }
 
+function isInvalidFormTitle() {
+  const title  = formTitle.value.trim();
+  if(title.length === 0){
+    formTitle.setCustomValidity('The title must be filled!')
+    return true;
+  }
+  formTitle.setCustomValidity('');
+  return false;
+}
+
+function isInvalidFormAuthor() {
+  const author  = formAuthor.value.trim();
+  if(author.length === 0){
+    formAuthor.setCustomValidity('The author name must be filled!')
+    return true;
+  } 
+  formAuthor.setCustomValidity('');
+  return false;
+}
+
+function isInvalidFormPages() {
+  const pages  = Number(formPages.value);
+  if(pages<1){
+    formPages.setCustomValidity('The page count must at least be 1!')
+    return true;
+  }
+  formPages.setCustomValidity('');
+  return false;
+}
+
+function isInvalidFormReadStatus() {
+  if(formReadStatusTrue.checked || formReadStatusFalse.checked) {
+    formReadStatusFalse.setCustomValidity('');
+    return false;
+  }
+  formReadStatusFalse.setCustomValidity('Select a read status!');
+  return true;
+}
+
 function addNewBook(event) {
     event.preventDefault();
     dialog.close();
@@ -125,6 +164,15 @@ function addNewBook(event) {
     myLibrary.push(book);
     createCardForBook(book);
     clearFormInputs();
+}
+
+function submitForm(event) {
+  if(isInvalidFormTitle()) return;
+  if(isInvalidFormAuthor()) return;
+  if(isInvalidFormPages()) return;
+  if(isInvalidFormReadStatus()) return;
+
+  addNewBook(event);
 }
 
 const myLibrary = [];
@@ -164,5 +212,7 @@ closeButton.addEventListener("click", (event) => {
     dialog.close();
 });
 
-submit.addEventListener("click", addNewBook);
-
+formTitle.addEventListener('input', isInvalidFormTitle);
+formAuthor.addEventListener('input', isInvalidFormAuthor);
+formPages.addEventListener('input', isInvalidFormPages);
+submit.addEventListener("click", submitForm);
