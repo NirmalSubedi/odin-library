@@ -118,43 +118,39 @@ function clearFormInputs() {
             'nothing selected';
 }
 
-function isInvalidFormTitle() {
+function checkFormTitle() {
   const title  = formTitle.value.trim();
   if(title.length === 0){
     formTitle.setCustomValidity('The title must be filled!')
-    return true;
+  } else {
+    formTitle.setCustomValidity('');
   }
-  formTitle.setCustomValidity('');
-  return false;
 }
 
-function isInvalidFormAuthor() {
+function checkFormAuthor() {
   const author  = formAuthor.value.trim();
   if(author.length === 0){
     formAuthor.setCustomValidity('The author name must be filled!')
-    return true;
-  } 
-  formAuthor.setCustomValidity('');
-  return false;
+  } else {
+    formAuthor.setCustomValidity('');
+  }
 }
 
-function isInvalidFormPages() {
+function checkFormPages() {
   const pages  = Number(formPages.value);
   if(pages<1){
     formPages.setCustomValidity('The page count must at least be 1!')
-    return true;
+  } else {
+    formPages.setCustomValidity('');
   }
-  formPages.setCustomValidity('');
-  return false;
 }
 
-function isInvalidFormReadStatus() {
+function checkFormReadStatus() {
   if(formReadStatusTrue.checked || formReadStatusFalse.checked) {
     formReadStatusFalse.setCustomValidity('');
-    return false;
+  } else {
+    formReadStatusFalse.setCustomValidity('Select a read status!');
   }
-  formReadStatusFalse.setCustomValidity('Select a read status!');
-  return true;
 }
 
 function addNewBook(event) {
@@ -166,13 +162,17 @@ function addNewBook(event) {
     clearFormInputs();
 }
 
-function submitForm(event) {
-  if(isInvalidFormTitle()) return;
-  if(isInvalidFormAuthor()) return;
-  if(isInvalidFormPages()) return;
-  if(isInvalidFormReadStatus()) return;
+function checkForm(){
+    checkFormAuthor();
+    checkFormTitle();
+    checkFormPages();
+    checkFormReadStatus();
+}
 
-  addNewBook(event);
+function submitForm(event) {
+    checkForm();
+    if(form.checkValidity() === false) return;
+    addNewBook(event);
 }
 
 const myLibrary = [];
@@ -180,6 +180,7 @@ const myLibrary = [];
 const container = $('.container');
 const library = $('.library');
 const dialog = $('dialog');
+const form = $('form');
 const showButton = $('button.show');
 const closeButton = $('.image.close');
 const formTitle = $('#title');
@@ -212,7 +213,7 @@ closeButton.addEventListener("click", (event) => {
     dialog.close();
 });
 
-formTitle.addEventListener('input', isInvalidFormTitle);
-formAuthor.addEventListener('input', isInvalidFormAuthor);
-formPages.addEventListener('input', isInvalidFormPages);
+formTitle.addEventListener('input', checkFormTitle);
+formAuthor.addEventListener('input', checkFormAuthor);
+formPages.addEventListener('input', checkFormPages);
 submit.addEventListener("click", submitForm);
